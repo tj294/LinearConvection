@@ -10,7 +10,7 @@ Options:
  --Nz=<Nz>      # z-Resolution [default: 128]
  --Nn=<Nn>      # Fourier modes [default: 10]
  --a=<a>        # Aspect Ratio [default: 1]
- --nsteps=<nsteps>  # Steps to run for [default: 1000]
+ --stop=<stop>  # Sim-time to stop at [default: 0.5]
  --crate=<crate>    # Check rate [default: 100]
  -o <OUT>           # Output directory [default: ./DATA/]
 """
@@ -73,10 +73,9 @@ for n in range(1, Nn):
 check_rate = int(args["--crate"])
 mid_depth_idx = Nz // 2
 
-stop_time = 1.0
+stop_time = float(args["--stop"])
 i = 0
 # ! Perform Sim Loop!
-# for i in range(int(args["--nsteps"])):
 while t <= stop_time:
     #! Check if amplitudes are growing or decaying
     if i % check_rate == 0:
@@ -157,7 +156,7 @@ while t <= stop_time:
 
 
 # ! Final Output
-print(f"Loop {i:0>4}/{int(args['--nsteps'])}, t={dt*i:.1e}")
+print(f"Loop {i:0>4}, t={dt*i:.1e}")
 print(f" n | Temp Amp | Vort Amp | Strf Amp | Temp log | Vort Log | Strf Log |")
 current_temp_amp = np.log(np.abs(T[mid_depth_idx, :]))
 current_ω_amp = np.log(np.abs(ω[mid_depth_idx, :]))
